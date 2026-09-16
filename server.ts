@@ -398,6 +398,16 @@ restoreOverwrittenFilesWithOriginals().then(() => {
   app.use('/rest/basket/:id', security.isAuthorized())
   app.use('/rest/basket/:id/order', security.isAuthorized())
   /* Challenge evaluation before finale takes over */ // vuln-code-snippet hide-start
+  app.post('/api/Feedbacks', (req: Request, res: Response, next: NextFunction) => {
+    // Prevent feedback impersonation: bind feedback to the authenticated user (if any).
+    const authUser = security.authenticatedUsers.from(req)
+    if (authUser?.data?.id) {
+      req.body.UserId = authUser.data.id
+    } else {
+      delete req.body.UserId
+    }
+    next()
+  })
   app.post('/api/Feedbacks', verify.forgedFeedbackChallenge())
   /* Captcha verification before finale takes over */
   app.post('/api/Feedbacks', verifyCaptcha())
