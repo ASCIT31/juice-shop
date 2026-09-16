@@ -7,14 +7,9 @@ import path from 'node:path'
 import { type Request, type Response, type NextFunction } from 'express'
 
 export function serveQuarantineFiles () {
-  return ({ params, query }: Request, res: Response, next: NextFunction) => {
-    const file = params.file
-
-    if (!file.includes('/')) {
-      res.sendFile(path.resolve('ftp/quarantine/', file))
-    } else {
-      res.status(403)
-      next(new Error('File names cannot contain forward slashes!'))
-    }
+  return (_req: Request, res: Response, next: NextFunction) => {
+    // The quarantine directory holds malware samples and must never be served publicly.
+    res.status(403)
+    next(new Error('Access to the quarantine directory is forbidden.'))
   }
 }
