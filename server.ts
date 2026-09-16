@@ -602,7 +602,7 @@ restoreOverwrittenFilesWithOriginals().then(() => {
   app.post('/rest/basket/:id/checkout', placeOrder())
   app.put('/rest/basket/:id/coupon/:coupon', applyCoupon())
   app.get('/rest/admin/application-version', retrieveAppVersion())
-  app.get('/rest/admin/application-configuration', retrieveAppConfiguration())
+  app.get('/rest/admin/application-configuration', security.isAuthorized(), retrieveAppConfiguration())
   app.get('/rest/repeat-notification', repeatNotification())
   app.get('/rest/continue-code', continueCode())
   app.get('/rest/continue-code-findIt', continueCodeFindIt())
