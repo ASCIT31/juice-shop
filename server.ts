@@ -178,8 +178,13 @@ restoreOverwrittenFilesWithOriginals().then(() => {
   app.use(compression())
 
   /* Bludgeon solution for possible CORS problems: Allow everything! */
-  app.options('*', cors())
-  app.use(cors())
+  const corsOptions = {
+    origin: ['https://demo.dark-moon.org'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
+  }
+  app.options('*', cors(corsOptions))
+  app.use(cors(corsOptions))
 
   /* Security middleware */
   app.use(helmet.noSniff())
