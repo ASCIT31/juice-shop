@@ -222,7 +222,7 @@ restoreOverwrittenFilesWithOriginals().then(() => {
   }))
 
   /* robots.txt */
-  app.use(robots({ UserAgent: '*', Disallow: '/ftp' }))
+  app.use(robots({ UserAgent: '*', Disallow: ['/ftp', '/score-board'] }))
 
   /* Check for any URLs having been called that would be expected for challenge solving without cheating */
   app.use(antiCheat.checkForPreSolveInteractions())
