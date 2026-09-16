@@ -673,7 +673,15 @@ restoreOverwrittenFilesWithOriginals().then(() => {
 
   /* Error Handling */
   app.use(verify.errorHandlingChallenge())
-  app.use(errorhandler())
+  if (process.env.NODE_ENV === 'production') {
+    // Generic error handler: never leak stack traces to clients in production
+    app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+      console.error(err)
+      res.status(500).json({ error: 'Internal Server Error' })
+    })
+  } else {
+    app.use(errorhandler())
+  }
 }).catch((err) => {
   console.error(err)
 })
