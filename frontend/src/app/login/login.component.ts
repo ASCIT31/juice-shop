@@ -58,7 +58,7 @@ export class LoginComponent implements OnInit {
   public oauthUnavailable = true
   public redirectUri = ''
   public testingUsername = 'testing@juice-sh.op'
-  public testingPassword = 'IamUsedForTesting'
+  public testingPassword = '' // hardcoded test credential removed from the client bundle
 
   ngOnInit (): void {
     const email = localStorage.getItem('email')
