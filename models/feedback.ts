@@ -59,10 +59,12 @@ const FeedbackModelInit = (sequelize: Sequelize) => {
         type: DataTypes.INTEGER,
         allowNull: false,
         set (rating: number) {
-          this.setDataValue('rating', rating)
-          challengeUtils.solveIf(challenges.zeroStarsChallenge, () => {
-            return Number(rating) === 0
-          })
+          // Server-side validation: rating must be an integer between 1 and 5.
+          const normalized = Number(rating)
+          if (!Number.isInteger(normalized) || normalized < 1 || normalized > 5) {
+            throw new Error('Rating must be an integer between 1 and 5')
+          }
+          this.setDataValue('rating', normalized)
         }
       }
     },
