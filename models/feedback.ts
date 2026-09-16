@@ -52,6 +52,8 @@ const FeedbackModelInit = (sequelize: Sequelize) => {
           } else {
             sanitizedComment = security.sanitizeSecure(comment)
           }
+          // Best-effort DLP: redact accidentally-pasted secrets such as BIP-39 mnemonics.
+          sanitizedComment = sanitizedComment.replace(/\b(?:[a-z]+\s+){11,}[a-z]+\b/gi, '[redacted potential secret]')
           this.setDataValue('comment', sanitizedComment)
         }
       },
