@@ -596,7 +596,14 @@ restoreOverwrittenFilesWithOriginals().then(() => {
   app.post('/rest/user/reset-password', resetPassword())
   app.get('/rest/user/security-question', securityQuestion())
   app.get('/rest/user/whoami', security.updateAuthenticatedUsers(), retrieveLoggedInUser())
-  app.get('/rest/user/authentication-details', authenticatedUsers())
+  app.get('/rest/user/authentication-details', (req: Request, res: Response, next: NextFunction) => {
+    const requester = security.authenticatedUsers.from(req)
+    if (requester?.data?.role !== security.roles.admin) {
+      res.status(403).json({ error: 'Forbidden' })
+      return
+    }
+    next()
+  }, authenticatedUsers())
   app.get('/rest/products/search', searchProducts())
   app.get('/rest/basket/:id', retrieveBasket())
   app.post('/rest/basket/:id/checkout', placeOrder())
