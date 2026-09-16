@@ -359,7 +359,14 @@ restoreOverwrittenFilesWithOriginals().then(() => {
   /* Feedbacks: GET allowed for feedback carousel, POST allowed in order to provide feedback without being logged in */
   app.use('/api/Feedbacks/:id', security.isAuthorized())
   /* Users: Only POST is allowed in order to register a new user */
-  app.get('/api/Users', security.isAuthorized())
+  app.get('/api/Users', security.isAuthorized(), (req: Request, res: Response, next: NextFunction) => {
+    const requester = security.authenticatedUsers.from(req)
+    if (requester?.data?.role !== security.roles.admin) {
+      res.status(403).json({ error: 'Forbidden' })
+      return
+    }
+    next()
+  })
   app.route('/api/Users/:id')
     .get(security.isAuthorized())
     .put(security.denyAll())
