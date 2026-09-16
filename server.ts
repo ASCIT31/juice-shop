@@ -342,8 +342,10 @@ restoreOverwrittenFilesWithOriginals().then(() => {
   app.enable('trust proxy')
   app.use('/rest/user/reset-password', rateLimit({
     windowMs: 5 * 60 * 1000,
-    max: 100,
-    keyGenerator ({ headers, ip }: { headers: any, ip: any }) { return headers['X-Forwarded-For'] ?? ip } // vuln-code-snippet vuln-line resetPasswordMortyChallenge
+    max: 5,
+    standardHeaders: true,
+    legacyHeaders: false,
+    keyGenerator ({ ip }: { ip: any }) { return ip } // key on the real socket IP, not a spoofable header
   }))
   // vuln-code-snippet end resetPasswordMortyChallenge
 
