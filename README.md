@@ -4,9 +4,9 @@
 >
 > Darkmoon's open source engine found and proved the vulnerabilities here; the fix pull requests were produced by the paid Pro remediation tier. See the results in [docs/REMEDIATION_BENCHMARK.md](docs/REMEDIATION_BENCHMARK.md). This is a fork of OWASP Juice Shop used as the demonstration target; the original project README follows below.
 >
-> <img src="docs/darkmoon-vulnerability.png" alt="A finding Darkmoon proved on this fork, admin account compromise, exploited, CVSS 9.8" width="520">
+> <img src="docs/darkmoon-cli.png" alt="Darkmoon's open source CLI, the exploitation engine detecting a CVE in the terminal" width="560">
 >
-> <sub>A finding Darkmoon's open source engine proved on this fork, admin account compromise, status EXPLOITED, CVSS 9.8. The fix pull request for it came from the paid Pro remediation tier.</sub>
+> <sub>Darkmoon's open source CLI finds and proves the vulnerability, here its exploitation engine flags CVE-2019-9978 in the terminal. The fix pull requests are produced by the paid Pro remediation tier.</sub>
 
 # ![Juice Shop Logo](https://raw.githubusercontent.com/juice-shop/juice-shop/master/frontend/src/assets/public/images/JuiceShop_Logo_100px.png) OWASP Juice Shop
 
