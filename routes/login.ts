@@ -20,6 +20,8 @@ export function login () {
     verifyPostLoginChallenges(user) // vuln-code-snippet hide-line
     BasketModel.findOrCreate({ where: { UserId: user.data.id } })
       .then(([basket]: [BasketModel, boolean]) => {
+        // Never embed the password hash or TOTP secret in the signed JWT payload
+        if (user.data) { delete (user.data as any).password; delete (user.data as any).totpSecret }
         const token = security.authorize(user)
         user.bid = basket.id // keep track of original basket
         security.authenticatedUsers.put(token, user)
