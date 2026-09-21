@@ -2,6 +2,8 @@
 
 > **Category:** `INTERNAL_REMEDIATION_DEMO_PRS` — this is a demonstration of the Darkmoon *remediation* engine on a controlled target. These pull requests are **internal** to `ASCIT31/juice-shop` (a standalone MIT copy of OWASP Juice Shop v19.2.1). They are **not** external/acquisition contributions and were never proposed to the upstream project.
 
+**Related:** the finding and proof-of-exploit engine is open source at [Darkmoon autonomous AI penetration testing](https://github.com/ASCIT31/Dark-Moon); the fix to pull request loop shown here is the [remediation benchmark, a Pro feature](https://dark-moon.org/remediation-benchmark/). See also the [AI pentest tool comparison](https://dark-moon.org/comparison/).
+
 ## Honest benchmark headline
 
 **From autonomous pentest to tested remediation: 42 of 57 findings are demonstrated end-to-end** — real finding -> real fix -> compiles (tsc) -> exploit retested on a live instance and confirmed closed -> open pull request awaiting human review.

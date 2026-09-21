@@ -1,3 +1,9 @@
+> ### This fork is a [Darkmoon, the open source autonomous AI penetration testing platform](https://github.com/ASCIT31/Dark-Moon) remediation demo
+>
+> [![Star Dark-Moon](https://img.shields.io/github/stars/ASCIT31/Dark-Moon?style=social)](https://github.com/ASCIT31/Dark-Moon)
+>
+> Darkmoon's open source engine found and proved the vulnerabilities here; the fix pull requests were produced by the paid Pro remediation tier. See the results in [docs/REMEDIATION_BENCHMARK.md](docs/REMEDIATION_BENCHMARK.md). This is a fork of OWASP Juice Shop used as the demonstration target; the original project README follows below.
+
 # ![Juice Shop Logo](https://raw.githubusercontent.com/juice-shop/juice-shop/master/frontend/src/assets/public/images/JuiceShop_Logo_100px.png) OWASP Juice Shop
 
 [![OWASP Flagship](https://img.shields.io/badge/owasp-flagship%20project-48A646.svg)](https://owasp.org/projects/#sec-flagships)
