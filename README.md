@@ -3,6 +3,10 @@
 > [![Star Dark-Moon](https://img.shields.io/github/stars/ASCIT31/Dark-Moon?style=social)](https://github.com/ASCIT31/Dark-Moon)
 >
 > Darkmoon's open source engine found and proved the vulnerabilities here; the fix pull requests were produced by the paid Pro remediation tier. See the results in [docs/REMEDIATION_BENCHMARK.md](docs/REMEDIATION_BENCHMARK.md). This is a fork of OWASP Juice Shop used as the demonstration target; the original project README follows below.
+>
+> <img src="docs/darkmoon-vulnerability.png" alt="A finding Darkmoon proved on this fork, admin account compromise, exploited, CVSS 9.8" width="520">
+>
+> <sub>A finding Darkmoon's open source engine proved on this fork, admin account compromise, status EXPLOITED, CVSS 9.8. The fix pull request for it came from the paid Pro remediation tier.</sub>
 
 # ![Juice Shop Logo](https://raw.githubusercontent.com/juice-shop/juice-shop/master/frontend/src/assets/public/images/JuiceShop_Logo_100px.png) OWASP Juice Shop
 
