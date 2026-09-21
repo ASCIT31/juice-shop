@@ -7,6 +7,12 @@
 > <img src="docs/darkmoon-cli.png" alt="Darkmoon's open source CLI, the exploitation engine detecting a CVE in the terminal" width="560">
 >
 > <sub>Darkmoon's open source CLI finds and proves the vulnerability, here its exploitation engine flags CVE-2019-9978 in the terminal. The fix pull requests are produced by the paid Pro remediation tier.</sub>
+>
+> <img src="docs/darkmoon-pro-vulnerability.png" alt="Pro web dashboard, a finding shown in the Darkmoon Pro web view" width="560">
+>
+> <sub><b>Pro:</b> the same finding in the paid Darkmoon Pro web dashboard, admin account compromise, status EXPLOITED, CVSS 9.8.</sub>
+>
+> <sub><b>Web dashboard and remediation are Darkmoon Pro (paid) features; the open source edition is the CLI shown above.</b></sub>
 
 # ![Juice Shop Logo](https://raw.githubusercontent.com/juice-shop/juice-shop/master/frontend/src/assets/public/images/JuiceShop_Logo_100px.png) OWASP Juice Shop
 
