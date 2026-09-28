@@ -184,6 +184,18 @@ restoreOverwrittenFilesWithOriginals().then(() => {
   /* Security middleware */
   app.use(helmet.noSniff())
   app.use(helmet.frameguard())
+  app.use(helmet.hsts({ maxAge: 31536000, includeSubDomains: true, preload: true }))
+  app.use(helmet.referrerPolicy({ policy: 'no-referrer' }))
+  app.use(helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      imgSrc: ["'self'", 'data:'],
+      objectSrc: ["'none'"],
+      frameAncestors: ["'none'"]
+    }
+  }))
   // app.use(helmet.xssFilter()); // = no protection from persisted XSS via RESTful API
   app.disable('x-powered-by')
   app.use(featurePolicy({
