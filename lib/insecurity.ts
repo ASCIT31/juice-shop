@@ -133,11 +133,12 @@ export const redirectAllowlist = new Set([
 ])
 
 export const isRedirectAllowed = (url: string) => {
-  let allowed = false
-  for (const allowedUrl of redirectAllowlist) {
-    allowed = allowed || url.includes(allowedUrl) // vuln-code-snippet vuln-line redirectChallenge
+  // Reject the '@'-embedded-credentials trick and substring matches: only exact
+  // allowlisted targets may be used as a redirect destination.
+  if (typeof url !== 'string' || url.includes('@')) {
+    return false
   }
-  return allowed
+  return redirectAllowlist.has(url)
 }
 // vuln-code-snippet end redirectCryptoCurrencyChallenge redirectChallenge
 
