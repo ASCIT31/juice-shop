@@ -8,9 +8,9 @@
 >
 > <sub>Darkmoon's open source CLI finds and proves the vulnerability, here its exploitation engine flags CVE-2019-9978 in the terminal. The fix pull requests are produced by the paid Pro remediation tier.</sub>
 >
-> <img src="docs/darkmoon-pro-vulnerability.png" alt="Pro web dashboard, a finding shown in the Darkmoon Pro web view" width="560">
+> <img src="docs/darkmoon-pro-finding.png" alt="Pro web dashboard, a finding shown in the Darkmoon Pro web view with severity, Exploited status, CVSS and evidence" width="560">
 >
-> <sub><b>Pro:</b> the same finding in the paid Darkmoon Pro web dashboard, admin account compromise, status EXPLOITED, CVSS 9.8.</sub>
+> <sub><b>Pro:</b> a finding in the paid Darkmoon Pro web dashboard (synthetic demo campaign): severity, proof status <code>Exploited</code>, CVSS 9.8, description, evidence and remediation, inside its asset tree.</sub>
 >
 > <sub><b>Web dashboard and remediation are Darkmoon Pro (paid) features; the open source edition is the CLI shown above.</b></sub>
 
