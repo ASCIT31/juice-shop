@@ -366,7 +366,15 @@ restoreOverwrittenFilesWithOriginals().then(() => {
     .delete(security.denyAll())
   /* Products: Only GET is allowed in order to view products */ // vuln-code-snippet neutral-line changeProductChallenge
   app.post('/api/Products', security.isAuthorized()) // vuln-code-snippet neutral-line changeProductChallenge
-  // app.put('/api/Products/:id', security.isAuthorized()) // vuln-code-snippet vuln-line changeProductChallenge
+  app.put('/api/Products/:id', security.isAuthorized(), (req: Request, res: Response, next: NextFunction) => { // vuln-code-snippet vuln-line changeProductChallenge
+    // Only administrators may modify the product catalogue (name, description, price).
+    const requester = security.authenticatedUsers.from(req)
+    if (requester?.data?.role !== security.roles.admin) {
+      res.status(403).json({ error: 'Forbidden' })
+      return
+    }
+    next()
+  })
   app.delete('/api/Products/:id', security.denyAll())
   /* Challenges: GET list of challenges allowed. Everything else forbidden entirely */
   app.post('/api/Challenges', security.denyAll())
