@@ -21,6 +21,16 @@ const registerWebsocketEvents = (server: any) => {
   // @ts-expect-error FIXME Type safety issue when setting global socket-io object
   globalWithSocketIO.io = io
 
+  // Only clients presenting a valid session token may open a Socket.IO connection.
+  io.use((socket: any, next: (err?: Error) => void) => {
+    const token = socket.handshake?.auth?.token
+    if (typeof token === 'string' && security.verify(token)) {
+      next()
+    } else {
+      next(new Error('Authentication required'))
+    }
+  })
+
   io.on('connection', (socket: any) => {
     if (firstConnectedSocket === null) {
       socket.emit('server started')
