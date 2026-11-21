@@ -7,7 +7,6 @@ import path from 'node:path'
 import { type Request, type Response, type NextFunction } from 'express'
 
 import * as utils from '../lib/utils'
-import * as security from '../lib/insecurity'
 import { challenges } from '../data/datacache'
 import * as challengeUtils from '../lib/challengeUtils'
 
@@ -24,9 +23,14 @@ export function servePublicFiles () {
   }
 
   function verify (file: string, res: Response, next: NextFunction) {
+    // Reject (encoded) null bytes outright instead of truncating after the extension check,
+    // otherwise `package.json.bak%2500.md` passes the allowlist and serves `package.json.bak`.
+    if (containsNullByte(file)) {
+      res.status(403)
+      next(new Error('Only .md and .pdf files are allowed!'))
+      return
+    }
     if (file && (endsWithAllowlistedFileType(file) || (file === 'incident-support.kdbx'))) {
-      file = security.cutOffPoisonNullByte(file)
-
       challengeUtils.solveIf(challenges.directoryListingChallenge, () => { return file.toLowerCase() === 'acquisitions.md' })
       verifySuccessfulPoisonNullByteExploit(file)
 
@@ -47,6 +51,10 @@ export function servePublicFiles () {
       return challenges.easterEggLevelOneChallenge.solved || challenges.forgottenDevBackupChallenge.solved || challenges.forgottenBackupChallenge.solved ||
         challenges.misplacedSignatureFileChallenge.solved || file.toLowerCase() === 'encrypt.pyc'
     })
+  }
+
+  function containsNullByte (param: string) {
+    return param.includes('\0') || param.toLowerCase().includes('%00')
   }
 
   function endsWithAllowlistedFileType (param: string) {
