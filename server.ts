@@ -361,7 +361,15 @@ restoreOverwrittenFilesWithOriginals().then(() => {
   /* Users: Only POST is allowed in order to register a new user */
   app.get('/api/Users', security.isAuthorized())
   app.route('/api/Users/:id')
-    .get(security.isAuthorized())
+    .get(security.isAuthorized(), (req: Request, res: Response, next: NextFunction) => {
+      // Object-level authorization: a user may only read their own profile, administrators any profile.
+      const requester = security.authenticatedUsers.from(req)
+      if (!requester?.data || (String(requester.data.id) !== String(req.params.id) && requester.data.role !== security.roles.admin)) {
+        res.status(403).json({ error: 'Forbidden' })
+        return
+      }
+      next()
+    })
     .put(security.denyAll())
     .delete(security.denyAll())
   /* Products: Only GET is allowed in order to view products */ // vuln-code-snippet neutral-line changeProductChallenge
