@@ -50,6 +50,10 @@ export class UserService {
     return this.isLoggedIn.asObservable()
   }
 
+  logout () {
+    return this.http.post(this.hostServer + '/rest/user/logout', {}).pipe(catchError((err) => { throw err }))
+  }
+
   changePassword (passwords: Passwords) {
     return this.http.get(this.hostServer + '/rest/user/change-password?current=' + passwords.current + '&new=' +
     passwords.new + '&repeat=' + passwords.repeat).pipe(map((response: any) => response.user), catchError((err) => { throw err.error }))

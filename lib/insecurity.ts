@@ -51,6 +51,17 @@ export const cutOffPoisonNullByte = (str: string) => {
   return str
 }
 
+// The session token cookie is set by the server only: not readable from JavaScript (HttpOnly),
+// sent over HTTPS only outside local development (Secure) and never on cross-site requests (SameSite=Strict).
+export const sessionCookieOptions = {
+  httpOnly: true,
+  secure: process.env.NODE_ENV !== 'development',
+  sameSite: 'strict' as const
+}
+export const setSessionCookie = (res: Response, token: string) => {
+  res.cookie('token', token, { ...sessionCookieOptions, maxAge: 6 * 60 * 60 * 1000 })
+}
+
 export const isAuthorized = () => expressJwt(({ secret: publicKey }) as any)
 export const denyAll = () => expressJwt({ secret: '' + Math.random() } as any)
 export const authorize = (user = {}) => jwt.sign(user, privateKey, { expiresIn: '6h', algorithm: 'RS256' })
@@ -192,7 +203,7 @@ export const updateAuthenticatedUsers = () => (req: Request, res: Response, next
       if (err === null) {
         if (authenticatedUsers.get(token) === undefined) {
           authenticatedUsers.put(token, decoded)
-          res.cookie('token', token)
+          setSessionCookie(res, token)
         }
       }
     })

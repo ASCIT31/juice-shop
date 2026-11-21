@@ -99,9 +99,7 @@ export class LoginComponent implements OnInit {
     this.userService.login(this.user).subscribe({
       next: (authentication: any) => {
         localStorage.setItem('token', authentication.token)
-        const expires = new Date()
-        expires.setHours(expires.getHours() + 8)
-        this.cookieService.put('token', authentication.token, { expires })
+        // The session cookie is now set by the server as HttpOnly/Secure/SameSite=Strict.
         sessionStorage.setItem('bid', authentication.bid)
         this.basketService.updateNumberOfCartItems()
         this.userService.isLoggedIn.next(true)
