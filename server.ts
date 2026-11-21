@@ -368,7 +368,9 @@ restoreOverwrittenFilesWithOriginals().then(() => {
   app.post('/api/Products', security.isAuthorized()) // vuln-code-snippet neutral-line changeProductChallenge
   // app.put('/api/Products/:id', security.isAuthorized()) // vuln-code-snippet vuln-line changeProductChallenge
   app.delete('/api/Products/:id', security.denyAll())
-  /* Challenges: GET list of challenges allowed. Everything else forbidden entirely */
+  /* Challenges: listing requires an authenticated session (it is the data behind the score board and
+     enumerates every weakness and its solved state). Everything else forbidden entirely */
+  app.get('/api/Challenges', security.isAuthorized())
   app.post('/api/Challenges', security.denyAll())
   app.use('/api/Challenges/:id', security.denyAll())
   /* Hints: GET and PUT hints allowed. Everything else forbidden */
