@@ -192,11 +192,8 @@ restoreOverwrittenFilesWithOriginals().then(() => {
     }
   }))
 
-  /* Hiring header */
-  app.use((req: Request, res: Response, next: NextFunction) => {
-    res.append('X-Recruiting', config.get('application.securityTxt.hiring'))
-    next()
-  })
+  /* No custom X-Recruiting header: it advertised an internal route on every response.
+     Hiring information stays available through /.well-known/security.txt. */
 
   /* Remove duplicate slashes from URL which allowed bypassing subsequent filters */
   app.use((req: Request, res: Response, next: NextFunction) => {
