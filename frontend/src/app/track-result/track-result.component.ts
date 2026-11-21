@@ -5,7 +5,7 @@
 
 import { ActivatedRoute } from '@angular/router'
 import { MatTableDataSource, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table'
-import { Component, type OnInit, inject } from '@angular/core'
+import { Component, type OnInit, inject, SecurityContext } from '@angular/core'
 import { TrackOrderService } from '../Services/track-order.service'
 import { DomSanitizer } from '@angular/platform-browser'
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -45,7 +45,7 @@ export class TrackResultComponent implements OnInit {
     this.orderId = this.route.snapshot.queryParams.id
     this.trackOrderService.find(this.orderId).subscribe((results) => {
 
-      this.results.orderNo = this.sanitizer.bypassSecurityTrustHtml(`<code>${results.data[0].orderId}</code>`)
+      this.results.orderNo = this.sanitizer.sanitize(SecurityContext.HTML, `<code>${results.data[0].orderId}</code>`) // sanitize, never trust server data as HTML
       this.results.email = results.data[0].email
       this.results.totalPrice = results.data[0].totalPrice
       this.results.products = results.data[0].products
