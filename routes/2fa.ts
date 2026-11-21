@@ -110,7 +110,7 @@ export async function setup (req: Request, res: Response) {
 
     const { password, setupToken, initialToken } = req.body
 
-    if (user.password !== security.hash(password)) {
+    if (!security.verifyPassword(password, user.password)) {
       throw new Error('Password doesnt match stored password')
     }
 
@@ -155,7 +155,7 @@ export async function disable (req: Request, res: Response) {
 
     const { password } = req.body
 
-    if (user.password !== security.hash(password)) {
+    if (!security.verifyPassword(password, user.password)) {
       throw new Error('Password doesnt match stored password')
     }
 
