@@ -10,11 +10,13 @@ import { UserModel } from '../models/user'
 import * as security from '../lib/insecurity'
 
 export function changePassword () {
-  return async ({ query, headers, connection }: Request, res: Response, next: NextFunction) => {
-    const currentPassword = query.current as string
-    const newPassword = query.new as string
+  // POST with a JSON body only: passwords never travel in the URL, and a cross-site link or
+  // image tag can no longer trigger a password change (CSRF).
+  return async ({ body, headers, connection }: Request, res: Response, next: NextFunction) => {
+    const currentPassword = body?.current as string
+    const newPassword = body?.new as string
     const newPasswordInString = newPassword?.toString()
-    const repeatPassword = query.repeat
+    const repeatPassword = body?.repeat
 
     if (!newPassword || newPassword === 'undefined') {
       res.status(401).send(res.__('Password cannot be empty.'))
@@ -36,7 +38,8 @@ export function changePassword () {
       return
     }
 
-    if (currentPassword && security.hash(currentPassword) !== loggedInUser.data.password) {
+    // Re-authentication is mandatory: the current password must always be supplied and match.
+    if (!currentPassword || security.hash(String(currentPassword)) !== loggedInUser.data.password) {
       res.status(401).send(res.__('Current password is not correct.'))
       return
     }
@@ -53,7 +56,8 @@ export function changePassword () {
         challenges.changePasswordBenderChallenge,
         () => user.id === 3 && !currentPassword && user.password === security.hash('slurmCl4ssic')
       )
-      res.json({ user })
+      // Never return the stored password hash (or other secrets) to the client.
+      res.json({ user: { id: user.id, email: user.email } })
     } catch (error) {
       next(error)
     }
