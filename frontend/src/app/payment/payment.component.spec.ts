@@ -322,6 +322,6 @@ describe('PaymentComponent', () => {
     spyOn(localStorage, 'setItem')
     component.choosePayment()
     expect(localStorage.setItem).toHaveBeenCalledWith('token', 'tokenValue')
-    expect(cookieService.put).toHaveBeenCalledWith('token', 'tokenValue')
+    expect(cookieService.put).not.toHaveBeenCalled()
   })
 })

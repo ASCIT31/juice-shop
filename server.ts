@@ -596,6 +596,11 @@ restoreOverwrittenFilesWithOriginals().then(() => {
   app.post('/rest/user/reset-password', resetPassword())
   app.get('/rest/user/security-question', securityQuestion())
   app.get('/rest/user/whoami', security.updateAuthenticatedUsers(), retrieveLoggedInUser())
+  app.post('/rest/user/logout', (req: Request, res: Response) => {
+    // The HttpOnly session cookie cannot be removed by client-side JavaScript.
+    res.clearCookie('token', security.sessionCookieOptions)
+    res.status(204).end()
+  })
   app.get('/rest/user/authentication-details', authenticatedUsers())
   app.get('/rest/products/search', searchProducts())
   app.get('/rest/basket/:id', retrieveBasket())
