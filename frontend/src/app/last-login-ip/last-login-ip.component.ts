@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { Component, inject, OnInit } from '@angular/core'
+import { Component, inject, OnInit, SecurityContext } from '@angular/core'
 import { DomSanitizer } from '@angular/platform-browser'
 import jwtDecode from 'jwt-decode'
 import { TranslateModule } from '@ngx-translate/core'
@@ -36,7 +36,7 @@ export class LastLoginIpComponent implements OnInit {
       payload = jwtDecode(token)
       if (payload.data.lastLoginIp) {
 
-        this.lastLoginIp = this.sanitizer.bypassSecurityTrustHtml(`<small>${payload.data.lastLoginIp}</small>`)
+        this.lastLoginIp = this.sanitizer.sanitize(SecurityContext.HTML, `<small>${payload.data.lastLoginIp}</small>`) // the IP comes from a client-controlled header
       }
     }
   }

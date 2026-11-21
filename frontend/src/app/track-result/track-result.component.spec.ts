@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: MIT
  */
 
+import { SecurityContext } from '@angular/core'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { type ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
 import { TranslateModule } from '@ngx-translate/core'
@@ -54,12 +55,13 @@ describe('TrackResultComponent', () => {
     expect(component).toBeTruthy()
   })
 
-  it('should consider order number as trusted HTML', () => {
+  it('should sanitize the order number instead of trusting it as HTML', () => {
     component.orderId = '<a src="link">Link</a>'
     trackOrderService.find.and.returnValue(of({ data: [{ orderId: component.orderId }] }))
     component.ngOnInit()
 
-    expect(sanitizer.bypassSecurityTrustHtml).toHaveBeenCalledWith('<code><a src="link">Link</a></code>')
+    expect(sanitizer.sanitize).toHaveBeenCalledWith(SecurityContext.HTML, '<code><a src="link">Link</a></code>')
+    expect(sanitizer.bypassSecurityTrustHtml).not.toHaveBeenCalled()
   })
 
   it('should set "delivered" status for delivered orders', () => {
