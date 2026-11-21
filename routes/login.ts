@@ -31,9 +31,12 @@ export function login () {
 
   return (req: Request, res: Response, next: NextFunction) => {
     verifyPreLoginChallenges(req) // vuln-code-snippet hide-line
-    models.sequelize.query(`SELECT * FROM Users WHERE email = '${req.body.email || ''}' AND password = '${security.hash(req.body.password || '')}' AND deletedAt IS NULL`, { model: UserModel, plain: true }) // vuln-code-snippet vuln-line loginAdminChallenge loginBenderChallenge loginJimChallenge
-      .then((authenticatedUser) => { // vuln-code-snippet neutral-line loginAdminChallenge loginBenderChallenge loginJimChallenge
-        const user = utils.queryResultToJson(authenticatedUser)
+    // Look the account up by email only (bound parameter) and verify the salted password hash in code.
+    models.sequelize.query('SELECT * FROM Users WHERE email = :email AND deletedAt IS NULL', { replacements: { email: String(req.body.email || '') }, model: UserModel, plain: true }) // vuln-code-snippet vuln-line loginAdminChallenge loginBenderChallenge loginJimChallenge
+      .then((foundUser) => { // vuln-code-snippet neutral-line loginAdminChallenge loginBenderChallenge loginJimChallenge
+        const candidate = utils.queryResultToJson(foundUser)
+        const passwordValid = Boolean(candidate.data?.id) && security.verifyPassword(String(req.body.password || ''), candidate.data?.password)
+        const user = passwordValid ? candidate : utils.queryResultToJson(null)
         if (user.data?.id && user.data.totpSecret !== '') {
           res.status(401).json({
             status: 'totp_token_required',

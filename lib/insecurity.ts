@@ -41,6 +41,28 @@ interface IAuthenticatedUsers {
 }
 
 export const hash = (data: string) => crypto.createHash('md5').update(data).digest('hex')
+// Password storage: salted, memory-hard scrypt instead of fast unsalted MD5.
+// Stored format: scrypt$<hex salt>$<hex derived key>
+const SCRYPT_KEYLEN = 64
+export const hashPassword = (password: string) => {
+  const salt = crypto.randomBytes(16).toString('hex')
+  const derived = crypto.scryptSync(String(password), salt, SCRYPT_KEYLEN).toString('hex')
+  return `scrypt$${salt}$${derived}`
+}
+export const verifyPassword = (password: unknown, stored?: string | null) => {
+  if (typeof password !== 'string' || !stored) return false
+  if (stored.startsWith('scrypt$')) {
+    const [, salt, expectedHex] = stored.split('$')
+    if (!salt || !expectedHex) return false
+    const expected = Buffer.from(expectedHex, 'hex')
+    const derived = crypto.scryptSync(password, salt, expected.length || SCRYPT_KEYLEN)
+    return expected.length === derived.length && crypto.timingSafeEqual(derived, expected)
+  }
+  // Legacy unsalted MD5 records (created before this change) are still accepted, compared in constant time.
+  const legacy = Buffer.from(hash(password))
+  const current = Buffer.from(stored)
+  return legacy.length === current.length && crypto.timingSafeEqual(legacy, current)
+}
 export const hmac = (data: string) => crypto.createHmac('sha256', 'pa4qacea4VK9t9nGv7yZtwmj').update(data).digest('hex')
 
 export const cutOffPoisonNullByte = (str: string) => {
