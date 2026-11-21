@@ -149,4 +149,14 @@ bootstrapApplication(AppComponent, {
         provideAnimations()
     ]
 })
+    .then(() => {
+        if (environment.production) {
+            // BrowserModule registers Angular's testability hooks on window. They are only needed by
+            // end-to-end test drivers and expose component/zone internals in production builds.
+            const globalScope = window as any
+            for (const hook of ['getAngularTestability', 'getAllAngularTestabilities', 'getAllAngularRootElements', 'frameworkStabilizers']) {
+                delete globalScope[hook]
+            }
+        }
+    })
     .catch((err: Error) => console.log(err))
