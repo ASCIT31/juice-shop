@@ -51,10 +51,33 @@ export const cutOffPoisonNullByte = (str: string) => {
   return str
 }
 
-export const isAuthorized = () => expressJwt(({ secret: publicKey }) as any)
+// Tokens are only ever issued with RS256. The installed JWT libraries pick the verification
+// algorithm from the (attacker-controlled) token header, which allows `alg: none` tokens and
+// RS256->HS256 confusion with the public key as HMAC secret. Pin the algorithm before verifying.
+const JWT_ALGORITHM = 'RS256'
+export const hasPinnedAlgorithm = (token?: string) => {
+  if (!token || typeof token !== 'string') return false
+  try {
+    return jws.decode(token)?.header?.alg === JWT_ALGORITHM
+  } catch {
+    return false
+  }
+}
+
+export const isAuthorized = () => {
+  const verifyJwt = expressJwt(({ secret: publicKey }) as any)
+  return (req: Request, res: Response, next: NextFunction) => {
+    const token = utils.jwtFrom(req)
+    if (token && !hasPinnedAlgorithm(token)) {
+      res.status(401).json({ error: 'Invalid token' })
+      return
+    }
+    verifyJwt(req, res, next)
+  }
+}
 export const denyAll = () => expressJwt({ secret: '' + Math.random() } as any)
-export const authorize = (user = {}) => jwt.sign(user, privateKey, { expiresIn: '6h', algorithm: 'RS256' })
-export const verify = (token: string) => token ? (jws.verify as ((token: string, secret: string) => boolean))(token, publicKey) : false
+export const authorize = (user = {}) => jwt.sign(user, privateKey, { expiresIn: '6h', algorithm: JWT_ALGORITHM })
+export const verify = (token: string) => token && hasPinnedAlgorithm(token) ? (jws.verify as ((token: string, secret: string) => boolean))(token, publicKey) : false
 export const decode = (token: string) => { return jws.decode(token)?.payload }
 
 export const sanitizeHtml = (html: string) => sanitizeHtmlLib(html)
@@ -187,7 +210,7 @@ export const appendUserId = () => {
 
 export const updateAuthenticatedUsers = () => (req: Request, res: Response, next: NextFunction) => {
   const token = req.cookies.token || utils.jwtFrom(req)
-  if (token) {
+  if (token && hasPinnedAlgorithm(token)) {
     jwt.verify(token, publicKey, (err: Error | null, decoded: any) => {
       if (err === null) {
         if (authenticatedUsers.get(token) === undefined) {

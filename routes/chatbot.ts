@@ -245,6 +245,10 @@ export function process () {
 
 async function getUserFromJwt (token: string): Promise<User | null> {
   return await new Promise((resolve) => {
+    if (!security.hasPinnedAlgorithm(token)) {
+      resolve(null)
+      return
+    }
     jwt.verify(token, security.publicKey, (err: VerifyErrors | null, decoded: JwtPayload | string | undefined) => {
       if (err !== null || !decoded || isString(decoded)) {
         resolve(null)
