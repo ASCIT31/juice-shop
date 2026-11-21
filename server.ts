@@ -399,6 +399,8 @@ restoreOverwrittenFilesWithOriginals().then(() => {
   app.use('/rest/basket/:id/order', security.isAuthorized())
   /* Challenge evaluation before finale takes over */ // vuln-code-snippet hide-start
   app.post('/api/Feedbacks', verify.forgedFeedbackChallenge())
+  /* Anti-automation: the arithmetic CAPTCHA is machine-solvable, so cap feedback submissions per client */
+  app.post('/api/Feedbacks', rateLimit({ windowMs: 5 * 60 * 1000, max: 10, validate: false }))
   /* Captcha verification before finale takes over */
   app.post('/api/Feedbacks', verifyCaptcha())
   /* Captcha Bypass challenge verification */
