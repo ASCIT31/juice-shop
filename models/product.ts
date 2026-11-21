@@ -56,8 +56,14 @@ const ProductModelInit = (sequelize: Sequelize) => {
           this.setDataValue('description', description)
         }
       },
-      price: DataTypes.DECIMAL,
-      deluxePrice: DataTypes.DECIMAL,
+      price: {
+        type: DataTypes.DECIMAL,
+        validate: { min: 0 } // a negative price would credit money at checkout
+      },
+      deluxePrice: {
+        type: DataTypes.DECIMAL,
+        validate: { min: 0 }
+      },
       image: DataTypes.STRING
     },
     {
