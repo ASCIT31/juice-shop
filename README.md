@@ -2,11 +2,11 @@
 >
 > [![Star Dark-Moon](https://img.shields.io/github/stars/ASCIT31/Dark-Moon?style=social)](https://github.com/ASCIT31/Dark-Moon)
 >
-> Darkmoon's open source engine found and proved the vulnerabilities here; the fix pull requests were produced by the paid Pro remediation tier. See the results in [docs/REMEDIATION_BENCHMARK.md](docs/REMEDIATION_BENCHMARK.md). This is a fork of OWASP Juice Shop used as the demonstration target; the original project README follows below.
+> Darkmoon's open source engine found the vulnerabilities here; pull requests #1 to #57 (one per finding of the 26 Apr 2026 run) were opened with the Darkmoon remediation agent, a paid Pro feature. All remediation pull requests are open and awaiting human review; none is merged and no retest record is published. See [docs/REMEDIATION_BENCHMARK.md](docs/REMEDIATION_BENCHMARK.md). This is a fork of OWASP Juice Shop used as the demonstration target; the original project README follows below.
 >
 > <img src="docs/darkmoon-cli.png" alt="Darkmoon's open source CLI, the exploitation engine detecting a CVE in the terminal" width="560">
 >
-> <sub>Darkmoon's open source CLI finds and proves the vulnerability, here its exploitation engine flags CVE-2019-9978 in the terminal. The fix pull requests are produced by the paid Pro remediation tier.</sub>
+> <sub>Darkmoon's open source CLI finds and proves the vulnerability, here its exploitation engine flags CVE-2019-9978 in the terminal. Remediation to pull request is a paid Pro feature.</sub>
 >
 > <img src="docs/darkmoon-pro-finding.png" alt="Pro web dashboard, a finding shown in the Darkmoon Pro web view with severity, Exploited status, CVSS and evidence" width="560">
 >
